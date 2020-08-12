@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyDtabase</title>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+ 
+</head>
+
+<style type="text/css">
+#h1{
+  color:blue;
+  margin-left: 12%;
+}
+
+#label{
+  color: blue;
+}
+</style>
+
+<body>
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCZIp40OlGpkdALuVZBxDlF1pMGmzdKS1E",
+    authDomain: "database-b5962.firebaseapp.com",
+    databaseURL: "https://database-b5962.firebaseio.com",
+    projectId: "database-b5962",
+    storageBucket: "database-b5962.appspot.com",
+    messagingSenderId: "1084516575848",
+    appId: "1:1084516575848:web:c9403c1e8fc2a1024229dd",
+    measurementId: "G-8WZVD2B1E0"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+var databaseRef = firebase.database().ref('users/');
+  //var rowIndex = 1;
+  
+  databaseRef.once('value', function(snapshot) {
+
+    snapshot.forEach(function(childSnapshot) {
+   var childKey = childSnapshot.key;
+   var childData = childSnapshot.val();
+ });
+});
+
+  function save_user(){
+   var user_name = document.getElementById('user_name').value;
+  
+   var uid = firebase.database().ref().child('users').push().key;
+   
+   var data = {
+    user_id: uid,
+    user_name: user_name
+   }
+   
+   var updates = {};
+   updates['/users/' + uid] = data;
+   firebase.database().ref().update(updates);
+   
+   alert('The user is created successfully!');
+   reload_page();
+  }
+  
+  function update_user(){
+   var user_name = document.getElementById('user_name').value;
+   var user_id = document.getElementById('user_id').value;
+
+   var data = {
+    user_id: user_id,
+    user_name: user_name
+   }
+   
+   var updates = {};
+   updates['/users/' + user_id] = data;
+   firebase.database().ref().update(updates);
+   
+   alert('The user is updated successfully!');
+   
+   reload_page();
+  }
+  
+  function delete_user(){
+   var user_id = document.getElementById('user_id').value;
+  
+   firebase.database().ref().child('/users/' + user_id).remove();
+   alert('The user is deleted successfully!');
+   reload_page();
+  }
+  
+  function reload_page(){
+   window.location.reload();
+  }
+ 
+</script>
+ <!--main div open-->
+<div class="container">
+  <div class="row"><!--Grid-->
+    <div class="col-4 "></div>
+     <div class="col-4">
+      <div class="card col-12 mt-4" ><!--Card bootstrap classes-->
+      <h1 id="h1">My-Database </h1>
+      <hr class="mt-1">
+      <label class="control-label" id="label" for="user_id">Enter User_id</label>
+      <input type="username" class="form-control" placeholder="user_id" id="user_id"/>
+      <label class="contorl-label" for="user_name" id="label"> Name</label>
+      <input class="form-control" type="text" placeholder="Enter User_name" id="user_name">
+   
+      <button class="btn btn-primary mt-4" id="submit" onclick="save_user()">Add</button>
+      <button class="btn btn-primary mt-4" id="submit" onclick="update_user()">Update</button>
+      <button class="btn btn-primary mt-4" id="submit" onclick="delete_user()">Delete</button>
+      </div><!--Card div close-->
+     </div>
+  </div><!--Grid div close-->
+  
+   <div class="col-4" ></div>  
+ <!--main div close-->
+
+</body>
+</html>
